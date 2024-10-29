@@ -41,7 +41,7 @@ See [Usage](#usage) above.
 
 ## Screenshots
 
-TBD.
+<img width="525" alt="Screenshot 2024-10-28 at 20 40 00" src="https://github.com/user-attachments/assets/7364922f-7720-4f13-be33-5f77dd326538">
 
 ## Links
 
