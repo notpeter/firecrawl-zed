@@ -2,6 +2,8 @@
 
 Simple Zed Extension that adds an `/firecrawl` slash command.
 
+For when `/fetch url` isn't enough.
+
 ## Usage
 
 Open the Assistant (`cmd-r`):

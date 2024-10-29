@@ -35,13 +35,13 @@ impl zed::Extension for SlashCommandFireCrawlExtension {
         }
         let worktree = worktree.ok_or("Worktree is required")?;
 
-        let (verb, user_url) = match args.len() {
+        let (verb, url) = match args.len() {
             0 => return Err("Specify [parse|crawl] and where to scrape.".to_string()),
-            1 if args[0] == "scrape" => return Err("Specify a URL to scrape".to_string()),
+            // 1 if args[0] == "scrape" => return Err("Specify a URL to scrape".to_string()),
             1 if args[0].starts_with("http") => ("scrape", args[0].clone()),
             1 => return Err("Invalid verb/URL; only http/https are supported.".to_string()),
-            2 if args[0] == "crawl" => return Err("Crawl not yet supported.".to_string()),
-            2 if args[0] == "scrape" && !args[1].starts_with("http") => ("scrape", args[1].clone()),
+            // 2 if args[0] == "crawl" => return Err("Crawl not yet supported.".to_string()),
+            // 2 if args[0] == "scrape" && !args[1].starts_with("http") => ("scrape", args[1].clone()),
             _ => return Err("Unexpected arguments. Expected 'URL'".to_string()),
         };
 
@@ -54,7 +54,7 @@ impl zed::Extension for SlashCommandFireCrawlExtension {
             .ok_or("FIRECRAWL_API_KEY not found in environment")?;
 
         let base_url = format!("https://api.firecrawl.dev");
-        let url = match verb {
+        let request_url = match verb {
             "scrape" => format!("{base_url}/v1/scrape"),
             "crawl" => format!("{base_url}/v1/crawl"),
             _ => return Err("Invalid verb.".to_string()),
@@ -66,7 +66,7 @@ impl zed::Extension for SlashCommandFireCrawlExtension {
         ];
         let body = Some(
             serde_json::to_vec(&json!({
-                "url": user_url,
+                "url": url.clone(),
                 "formats": ["markdown"],
             }))
             .unwrap(),
@@ -75,7 +75,7 @@ impl zed::Extension for SlashCommandFireCrawlExtension {
         let json_request = HttpRequest {
             method: HttpMethod::Post,
             redirect_policy: RedirectPolicy::FollowAll,
-            url: url.clone(),
+            url: request_url,
             headers,
             body,
         };
@@ -90,12 +90,13 @@ impl zed::Extension for SlashCommandFireCrawlExtension {
             Err(e) => return Err(format!("Failed to fetch: {}", e)),
         };
 
-        // let blanklines_regex = Regex::new("^ +$").unwrap();
+        let blanklines_regex = Regex::new("(?m) +\n").unwrap();
         let data = resp.data;
         let text = data.markdown;
-        // let text = blanklines_regex.replace_all(&text, "\n");
+        let text = blanklines_regex.replace_all(&text, "");
+        let text = format!("URL: {}\n{}", url.clone(), text);
         let text = text.to_string();
-        let label = format!("{} ({url}", data.metadata.title);
+        let label = format!("{} ( {} )", data.metadata.title, url);
 
         let sections = vec![SlashCommandOutputSection {
             range: Range {
