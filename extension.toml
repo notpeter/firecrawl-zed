@@ -1,0 +1,11 @@
+id = "firecrawl"
+name = "Firecrawl: Turn websites intoLLM-ready data"
+description = "Clean data crawled from any website."
+version = "0.1.0"
+schema_version = 1
+authors = ["Peter Tripp <notpeter@notpeter.net>"]
+repository = "https://github.com/notpeter/firecrawl-zed"
+
+[slash_commands.firecrawl]
+description = "Query Firecrawl"
+requires_argument = true
