@@ -12,6 +12,33 @@ Open the Assistant (`cmd-r`):
 /firecrawl <url>
 ```
 
+That's it.
+
+## Setup
+
+1. Generate a [FireCrawl API key](https://www.firecrawl.dev/app/api-keys)
+2. Add it to your environment:
+```
+export FIRECRAWL_API_KEY="fc-1234567890123456789023456789"
+```
+3. (Optional) Add the above line to your `~/.zshrc` or `~/.bash_profile`
+4. Quit Zed.
+5. Launch Zed from the CLI:
+```
+# Make sure you've set it correctly
+echo $FIRECRAWL_API_KEY
+zed
+```
+6. Clone this repo somewhere:
+```
+mkdir -p ~/source/ && cd ~/source
+git clone https://github.com/notpeter/firecrawl-zed
+```
+
+6. Install the extension: `cmd-shift-x` or `ctrl-shift-x` in Zed, then click "Install Dev Extension" and select `~/source/firecrawl-zed` or wherever you cloned the repo.
+
+See [Usage](#usage) above.
+
 ## Screenshots
 
 TBD.
